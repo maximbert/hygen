@@ -43,13 +43,19 @@ const render = async (
     .then(_ => Promise.all(_))
     .then(map(({ file, text }) => Object.assign({ file }, fm(text))))
     .then(
-      map(({ file, attributes, body }) => ({
-        file,
-        attributes: L.mapValues(attributes, _ =>
-          renderTemplate(_, args, config)
-        ),
-        body: renderTemplate(body, args, config)
-      }))
+      () => {
+
+        // this is a new and IMPORTANT line
+        args.args = args
+
+        return map(({ file, attributes, body }) => ({
+          file,
+          attributes: L.mapValues(attributes, _ =>
+            renderTemplate(_, args, config)
+          ),
+          body: renderTemplate(body, args, config)
+        }))
+      }
     )
 
 module.exports = render
